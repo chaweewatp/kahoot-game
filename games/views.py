@@ -157,7 +157,7 @@ def submitanswer(request):
     # if yes -> set count time
     msg=""
     if data['timeout']==True:
-        countTime=1000000
+        new_score=0
         msg += "ไม่ได้ตอบคำถาม"
     # else -> compare result
     else:
@@ -169,15 +169,15 @@ def submitanswer(request):
         # check answer is correct or not
         # if not correct -> set count time
         if res['correct'] != data['choice']:
-            countTime=200000
+            new_score=0
             msg += "ผิด!"
 
         # if correct -> set count time
         else:
             countTime=data["countTime"]
             msg += "ถูกต้อง!"
-    
-    new_score = 1/math.log10(countTime)*100
+
+            new_score = 1/math.log10(countTime)*100
     db = firebase.database()
     player = db.child("players/{}/sum_score".format(data['uid'])).get()
     current_score=player.val()
@@ -195,25 +195,23 @@ def submitanswer(request):
 @permission_classes((AllowAny,))  # here we specify permission by default we set IsAuthenticated
 def summaryquestion(request):
     data = json.loads(str(request.body, encoding='utf-8'))
-
-    print(data)
-    # save game_key
-    game_key="_sdfdfmdfer"
+    game_key=data['game_key']
     url ="https://ihub-reunion-default-rtdb.asia-southeast1.firebasedatabase.app"
     url += "/players"
     url += ".json?orderBy={}&equalTo=".format('"game_key"')
     url += f'"{game_key}"'
-    # print(url)
     resp = requests.get(url)
     res=json.loads(resp._content)   
-    print(res)
-    print(type(res))
+    res_dict={}
+    for key in list(res.keys()):
+        res_dict.update({res[key]["name"]:res[key]["sum_score"]})
+    sort_orders = sorted(res_dict.items(), key=lambda x: x[1], reverse=True)
     msg=""
 
-    for key in list(res.keys()):
-        if (not res[key]["end"]):
-            print(res[key])
-            msg += "{}  {} คะแนน".format(res[key]["name"], res[key]["sum_score"])
-            msg += ","
+    for item in sort_orders:
+        # print('{}-{}'.format(item[0], item[1]))
+        msg += "{}  {} คะแนน".format(item[0],item[1])
+        msg += "<br>"
 
+    print(msg)
     return Response(msg)

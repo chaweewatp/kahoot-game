@@ -8,7 +8,6 @@ function displayName(index, item){
 }
 // END_POINT_URL="http://127.0.0.1:8000"
 // function redirectToGamePlay(){
-
 //     console.log(END_POINT_URL+"/gamePlay/")
 //     var settings = {
 //         "url": END_POINT_URL+"/gamePlay/",
@@ -19,9 +18,7 @@ function displayName(index, item){
 //         },
 //         "data": JSON.stringify({"test": "test", "test2": "test2"}),
 //     };
-
 //     $.ajax(settings).done((response) => {
-
 //     }).fail((response) => {
 //         });
 // }
@@ -65,8 +62,6 @@ function getRtdbData() {
         if (changedPost=='start'){
             console.log('game is about to start');
             document.getElementById("autoSubmitForm").submit();
-            
-            
         }
       
     });
