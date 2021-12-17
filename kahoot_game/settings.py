@@ -77,9 +77,18 @@ WSGI_APPLICATION = 'kahoot_game.wsgi.application'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    #     'NAME': BASE_DIR / 'db.sqlite3',
+    # }
+        'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'd34tikial01qjb',
+        'USER': 'rnzltettxwxjii',
+        'PASSWORD': '326e9dfc622a610bc9f5b6ed63f6fc5a568b03541497e9b48ddbcb70683075a6',
+        'HOST': 'ec2-52-200-188-218.compute-1.amazonaws.com',
+        'PORT': '5432',
+        'CONN_MAX_AGE': 500,
     }
 }
 

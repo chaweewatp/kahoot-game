@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 import pyrebase
 import requests
 import json
+import math
 
 
 from rest_framework.decorators import api_view, permission_classes
@@ -11,7 +12,6 @@ from rest_framework.renderers import JSONRenderer
 
 # Create your views here.
 config = {
-
     # ihub reunion
     "apiKey": "AIzaSyBUBV2dWYzeTdn9QnCEJdQ3ieFOE17p95s",
     "authDomain": "ihub-reunion.firebaseapp.com",
@@ -20,6 +20,7 @@ config = {
 }
 
 firebase = pyrebase.initialize_app(config)
+
 def index(request):
     if (request.method == "POST"):
         game_code = request.POST.get("txt_game_code")
@@ -68,10 +69,8 @@ def registerName(request, game_key):
         context={"error_text": "No game data?"}
         return render(request, 'games/ErrorPage.html', context)
 
-
 def endgame(request):
     return render(request, 'games/endgame.html')
-
 
 def waitingRoom(request, game_key, uid):
     if (request.method == "POST"):
@@ -93,7 +92,6 @@ def waitingRoom(request, game_key, uid):
                 return redirect(playGame, game_key, question_id, uid)
     context = {"game_key":game_key, "uid":uid}
     return render(request, 'games/waitingRoom.html', context)
-
 
 def genChoice(dict_choice):
     list_choice=[]
@@ -146,3 +144,76 @@ def playGame(request, game_key, question_id, uid):
             }
     
     return render(request, 'games/playGame.html', context)
+
+
+
+@api_view(['POST'])
+@permission_classes((AllowAny,))  # here we specify permission by default we set IsAuthenticated
+def submitanswer(request):
+    # print('data')
+    data = json.loads(str(request.body, encoding='utf-8'))
+    print(data)
+    # check timeout or not
+    # if yes -> set count time
+    msg=""
+    if data['timeout']==True:
+        countTime=1000000
+        msg += "ไม่ได้ตอบคำถาม"
+    # else -> compare result
+    else:
+        url ="https://ihub-reunion-default-rtdb.asia-southeast1.firebasedatabase.app"
+        url += "/games/"+data['game_key']+"/questions/"+data['question_key']
+        url += ".json"
+        resp = requests.get(url)
+        res=json.loads(resp._content)   
+        # check answer is correct or not
+        # if not correct -> set count time
+        if res['correct'] != data['choice']:
+            countTime=200000
+            msg += "ผิด!"
+
+        # if correct -> set count time
+        else:
+            countTime=data["countTime"]
+            msg += "ถูกต้อง!"
+    
+    new_score = 1/math.log10(countTime)*100
+    db = firebase.database()
+    player = db.child("players/{}/sum_score".format(data['uid'])).get()
+    current_score=player.val()
+    # update new score
+    player = db.child("players/{}".format(data['uid'])).update({'sum_score':current_score+new_score})
+
+    
+    msg += "  ได้รับ"
+    msg += str(new_score)
+    msg += " คะแนน"
+    return Response(msg)
+
+
+@api_view(['POST'])
+@permission_classes((AllowAny,))  # here we specify permission by default we set IsAuthenticated
+def summaryquestion(request):
+    data = json.loads(str(request.body, encoding='utf-8'))
+
+    print(data)
+    # save game_key
+    game_key="_sdfdfmdfer"
+    url ="https://ihub-reunion-default-rtdb.asia-southeast1.firebasedatabase.app"
+    url += "/players"
+    url += ".json?orderBy={}&equalTo=".format('"game_key"')
+    url += f'"{game_key}"'
+    # print(url)
+    resp = requests.get(url)
+    res=json.loads(resp._content)   
+    print(res)
+    print(type(res))
+    msg=""
+
+    for key in list(res.keys()):
+        if (not res[key]["end"]):
+            print(res[key])
+            msg += "{}  {} คะแนน".format(res[key]["name"], res[key]["sum_score"])
+            msg += ","
+
+    return Response(msg)

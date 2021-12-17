@@ -5,8 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Question</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js" integrity="sha256-xNzN2a4ltkB44Mc/Jz3pT4iU1cmeR0FkXs4pru/JxaQ=" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.slim.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 <style>
@@ -21,6 +21,7 @@
 <body>
   <input id="game_key"  value="{{ game_key }}" hidden=true>
   <input id="question_key"  value="{{ question_key }}" hidden=true>
+  <input id="uid"  value="{{ uid }}" hidden=true>
 
   question No. {{ question_id }}<br>
   คำถาม:<br>
@@ -32,6 +33,10 @@
     {% csrf_token %}
     <input type="number" name="next_question_id" value={{ next_question_id }} hidden=true><br>
   </form>
+
+  <p id="response_msg"></p>
+  <p id="summary_msg"></p>
+
 
 </body>
 <script src="https://www.gstatic.com/firebasejs/8.0.1/firebase.js"></script>
