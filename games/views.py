@@ -1,0 +1,148 @@
+from django.shortcuts import render, redirect
+import pyrebase
+import requests
+import json
+
+
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import AllowAny
+from rest_framework.response import Response
+from rest_framework.renderers import JSONRenderer
+
+# Create your views here.
+config = {
+
+    # ihub reunion
+    "apiKey": "AIzaSyBUBV2dWYzeTdn9QnCEJdQ3ieFOE17p95s",
+    "authDomain": "ihub-reunion.firebaseapp.com",
+    "databaseURL": "https://ihub-reunion-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "storageBucket": "ihub-reunion.appspot.com"
+}
+
+firebase = pyrebase.initialize_app(config)
+def index(request):
+    if (request.method == "POST"):
+        game_code = request.POST.get("txt_game_code")
+        url ="https://ihub-reunion-default-rtdb.asia-southeast1.firebasedatabase.app"
+        url += "/games"
+        url += ".json?orderBy={}&equalTo=".format('"game_code"')
+        url += f'"{game_code}"'
+        resp = requests.get(url)
+        res=json.loads(resp._content)    
+        game_key=list(res.keys())[0]
+        return redirect(registerName, game_key)
+    return render(request, 'games/index.html')
+
+def registerName(request, game_key):
+
+    if (request.method == "POST"):
+        name = request.POST.get("txt_name")
+        # save data in google firebase
+        db = firebase.database()
+        res = db.child("players").push({'game_key':game_key, 'name':name, 'sum_score':0, 'end':False})
+        # get uid key from firebase
+        uid = res['name']
+        return redirect(waitingRoom, game_key, uid)
+        
+    # url ="https://ihub-reunion-default-rtdb.asia-southeast1.firebasedatabase.app"
+    # url += "/games"
+    # url += ".json?orderBy={}&equalTo=".format('"game_code"')
+    # url += f'"{game_code}"'
+    # resp = requests.get(url)
+    # res=json.loads(resp._content)    
+
+    url = "https://ihub-reunion-default-rtdb.asia-southeast1.firebasedatabase.app"
+    url += "/games/{}.json".format(game_key)
+    resp = requests.get(url)
+    res=json.loads(resp._content)    
+
+    if len(res) >= 1:
+        print(res["status"])
+        if res["status"] != "ready":
+            context={"error_text": "The game is already start!"}
+            return render(request, 'games/ErrorPage.html', context)
+        else: 
+            context = {"game_key":game_key}
+            return render(request, 'games/registerName.html', context)
+    else:
+        context={"error_text": "No game data?"}
+        return render(request, 'games/ErrorPage.html', context)
+
+
+def endgame(request):
+    return render(request, 'games/endgame.html')
+
+
+def waitingRoom(request, game_key, uid):
+    if (request.method == "POST"):
+        question_id=1
+        url ="https://ihub-reunion-default-rtdb.asia-southeast1.firebasedatabase.app"
+        url += "/games/"+game_key+"/questions"
+        url += ".json?orderBy={}&equalTo=".format('"_id"')
+        url += str(question_id)
+        resp = requests.get(url)
+        res=json.loads(resp._content)    
+        dict_question=res[list(res.keys())[0]]
+        if (dict_question['end'] == True):
+            return redirect(endgame)
+        else:
+            if (dict_question['status'] != "ready"):
+                context={"error_text": "The question is finished"}
+                return render(request, 'games/ErrorPage.html', context)
+            else:
+                return redirect(playGame, game_key, question_id, uid)
+    context = {"game_key":game_key, "uid":uid}
+    return render(request, 'games/waitingRoom.html', context)
+
+
+def genChoice(dict_choice):
+    list_choice=[]
+    for key, value in dict_choice.items():
+        list_choice.append({'choice':key, 'text':value})
+    return list_choice
+
+def playGame(request, game_key, question_id, uid):
+
+    if (request.method == "POST"):
+        next_question_id = request.POST.get("next_question_id")
+        # print(next_question_id)
+        # # next_question_id="2" # get from form
+        # gen_question(game_key=game_key, question_id=next_question_id, uid=uid)
+        question_id=next_question_id
+        url ="https://ihub-reunion-default-rtdb.asia-southeast1.firebasedatabase.app"
+        url += "/games/"+game_key+"/questions"
+        url += ".json?orderBy={}&equalTo=".format('"_id"')
+        url += str(question_id)
+        # print(url)
+        resp = requests.get(url)
+        res=json.loads(resp._content)    
+        dict_question=res[list(res.keys())[0]]
+        
+        if (dict_question['end'] == True):
+            return redirect(endgame)
+        else:
+            if (dict_question['status'] != "ready"):
+                context={"error_text": "The question is finished"}
+                return render(request, 'games/ErrorPage.html', context)
+            else:
+                return redirect(playGame, game_key, question_id, uid)
+
+    url ="https://ihub-reunion-default-rtdb.asia-southeast1.firebasedatabase.app"
+    url += "/games/"+game_key+"/questions"
+    url += ".json?orderBy={}&equalTo=".format('"_id"')
+    # url += question_id
+    url += str(question_id)
+    resp = requests.get(url)
+    res=json.loads(resp._content)    
+    question_key=list(res.keys())[0]
+    dict_question=res[question_key]
+    context = {
+        "game_key":game_key, 
+        "question_key":question_key, 
+        "uid":uid,
+        "text":dict_question['text'],
+        "answer":genChoice(dict_question['choices']),
+        "next_question_id":dict_question['next_id']
+            }
+    
+    return render(request, 'games/playGame.html', context)
