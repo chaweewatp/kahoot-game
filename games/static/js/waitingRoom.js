@@ -2,26 +2,7 @@ jQuery(document).ready(function () {
     getRtdbData();
 });
 
-function displayName(index, item){
-    // console.log(index)
-    // console.log(item)
-}
-// END_POINT_URL="http://127.0.0.1:8000"
-// function redirectToGamePlay(){
-//     console.log(END_POINT_URL+"/gamePlay/")
-//     var settings = {
-//         "url": END_POINT_URL+"/gamePlay/",
-//         "method": "POST",
-//         "timeout": 0,
-//         "headers": {
-//             "Content-Type": "application/json"
-//         },
-//         "data": JSON.stringify({"test": "test", "test2": "test2"}),
-//     };
-//     $.ajax(settings).done((response) => {
-//     }).fail((response) => {
-//         });
-// }
+
 
 function getRtdbData() {
     const firebaseConfig = {

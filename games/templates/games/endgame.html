@@ -12,7 +12,10 @@
 </head>
 <body>
     เกมส์จบแล้วจ้าา <br>
-    ผู้ชนะได้แก่ xxxxx <br>
+
+    {% for item in list_top%}
+      {{ item.name }} - {{ item.score }} คะแนน<br>
+    {% endfor %}
 </body>
 
 

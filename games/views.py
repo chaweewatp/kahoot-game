@@ -69,8 +69,27 @@ def registerName(request, game_key):
         context={"error_text": "No game data?"}
         return render(request, 'games/ErrorPage.html', context)
 
-def endgame(request):
-    return render(request, 'games/endgame.html')
+def endgame(request, game_key):
+    context={"list_top":[]}
+
+    url ="https://ihub-reunion-default-rtdb.asia-southeast1.firebasedatabase.app"
+    url += "/players"
+    url += ".json?orderBy={}&equalTo=".format('"game_key"')
+    url += f'"{game_key}"'
+    resp = requests.get(url)
+    res=json.loads(resp._content)   
+    res_dict={}
+    for key in list(res.keys()):
+        res_dict.update({res[key]["name"]:res[key]["sum_score"]})
+    sort_orders = sorted(res_dict.items(), key=lambda x: x[1], reverse=True)
+
+    for item in sort_orders[0:4]:
+        # print('{}-{}'.format(item[0], item[1]))
+        context["list_top"].append({"name":item[0], "score":item[1]})
+
+
+
+    return render(request, 'games/endgame.html', context=context)
 
 def waitingRoom(request, game_key, uid):
     if (request.method == "POST"):
@@ -83,7 +102,7 @@ def waitingRoom(request, game_key, uid):
         res=json.loads(resp._content)    
         dict_question=res[list(res.keys())[0]]
         if (dict_question['end'] == True):
-            return redirect(endgame)
+            return redirect(endgame, game_key)
         else:
             if (dict_question['status'] != "ready"):
                 context={"error_text": "The question is finished"}
@@ -117,7 +136,7 @@ def playGame(request, game_key, question_id, uid):
         dict_question=res[list(res.keys())[0]]
         
         if (dict_question['end'] == True):
-            return redirect(endgame)
+            return redirect(endgame, game_key)
         else:
             if (dict_question['status'] != "ready"):
                 context={"error_text": "The question is finished"}
@@ -189,7 +208,6 @@ def submitanswer(request):
     msg += str(new_score)
     msg += " คะแนน"
     return Response(msg)
-
 
 @api_view(['POST'])
 @permission_classes((AllowAny,))  # here we specify permission by default we set IsAuthenticated
