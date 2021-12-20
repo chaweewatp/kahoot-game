@@ -2,6 +2,10 @@ jQuery(document).ready(function () {
   getRtdbData();
 });
 
+var data = [];
+var layout;
+var fill = d3.scale.ordinal(d3.schemeCategory20);
+
 function getRtdbData() {
   const firebaseConfig = {
     // apiKey: localStorage.APIkey,
@@ -29,10 +33,13 @@ function getRtdbData() {
   playerRef
     .orderByChild("game_key")
     .equalTo(game_key)
-    .on("value", function (snapshot) {
-      snapshot.forEach((childSnapshot) => {
+    .on("value", async function (snapshot) {
+      $("#waitingListMobile").empty();
+      $("#waitingListDesktop").empty();
+      await snapshot.forEach((childSnapshot) => {
         let item = childSnapshot.val();
         console.log(item);
+        //data.push({ text: item.name, value: 1000 + Math.random() * 1000 });
         $("#waitingListMobile").append(
           '<div class="name-border" id="' +
             item.name +
@@ -48,6 +55,8 @@ function getRtdbData() {
             "</span></div>"
         );
       });
+      //layout = d3.layout.cloud().size([400, 300]).words(data).on("end", draw);
+      //layout.start();
     });
 
   // var game_key=document.getElementById("game_key").value;
@@ -65,4 +74,26 @@ function getRtdbData() {
       //   document.getElementById("autoSubmitForm").submit();
     }
   });
+}
+
+function draw(words) {
+  d3.select("#demo1")
+    .append("g")
+    .attr(
+      "transform",
+      "translate(" + layout.size()[0] / 2 + "," + layout.size()[1] / 2 + ")"
+    )
+    .selectAll("text")
+    .data(words)
+    .enter()
+    .append("text")
+    .text((d) => d.text)
+    .style("font-size", (d) => d.size + "px")
+    .style("font-family", (d) => d.font)
+    .style("fill", (d, i) => fill(i))
+    .attr("text-anchor", "middle")
+    .attr(
+      "transform",
+      (d) => "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")"
+    );
 }
