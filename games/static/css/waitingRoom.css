@@ -1,0 +1,185 @@
+body {
+  height: 100%;
+  width: 100%;
+}
+
+.outer {
+  background: url("/static/image/background-desktop.png");
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: center;
+  background-size: cover;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 24px;
+}
+
+@media only screen and (max-width: 700px) {
+  .outer {
+    background: url("/static/image/background-mobile.png");
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center;
+    background-size: cover;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 24px;
+  }
+}
+
+.title {
+  color: white;
+  text-align: center;
+}
+
+.title-text {
+  font-family: "Cherry Bomb";
+  font-size: calc(2em + 5vmin);
+  font-weight: 400;
+  margin: 0;
+}
+
+.title-text-under {
+  font-family: "Cherry Bomb";
+  font-size: 20px;
+  font-weight: 400;
+  margin: 0;
+}
+
+.title-text-loading {
+  font-family: "Capriola";
+  font-size: 24px;
+  font-weight: 400;
+  margin: 0;
+}
+
+.list-border-mobile {
+  height: 0vh;
+  width: 100%;
+  overflow-y: scroll;
+  visibility: hidden;
+}
+
+@media only screen and (max-width: 700px) {
+  .list-border-mobile {
+    height: 70vh;
+    width: 100%;
+    padding: 32px 24px;
+    overflow-y: scroll;
+    visibility: visible;
+  }
+}
+
+.list-border-desktop {
+  height: 70vh;
+  width: 100%;
+  padding: 32px 24px;
+  overflow-y: scroll;
+  visibility: visible;
+}
+
+@media only screen and (max-width: 700px) {
+  .list-border-desktop {
+    height: 0vh;
+    width: 100%;
+    overflow-y: scroll;
+    visibility: hidden;
+  }
+}
+
+.name-border {
+  width: 100%;
+  text-align: center;
+  padding-bottom: 8px;
+}
+
+.name-text {
+  color: white;
+  font-family: "Cherry Bomb";
+  font-size: 16px;
+  font-weight: 400;
+}
+
+.bottom-text {
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 24px;
+  color: #ffffff;
+  visibility: hidden;
+}
+
+@media only screen and (max-width: 700px) {
+  .bottom-text {
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 24px;
+    color: #ffffff;
+    visibility: visible;
+  }
+}
+
+@keyframes ldio-td6ns31unp {
+  0% {
+    transform: scale(1.31);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+.ldio-td6ns31unp div {
+  position: absolute;
+  width: 59.1px;
+  height: 59.1px;
+  top: 26.26666666666667px;
+  left: 26.26666666666667px;
+  background: #f24125;
+  animation: ldio-td6ns31unp 0.7042253521126761s cubic-bezier(0, 0.5, 0.5, 1)
+    infinite;
+  animation-delay: -0.2112676056338028s;
+}
+.ldio-td6ns31unp div:nth-child(2) {
+  top: 26.26666666666667px;
+  left: 111.63333333333334px;
+  background: #ffc31d;
+  animation-delay: -0.14084507042253522s;
+}
+.ldio-td6ns31unp div:nth-child(3) {
+  top: 111.63333333333334px;
+  left: 26.26666666666667px;
+  background: #2cd997;
+  animation-delay: 0s;
+}
+.ldio-td6ns31unp div:nth-child(4) {
+  top: 111.63333333333334px;
+  left: 111.63333333333334px;
+  background: #3da1fb;
+  animation-delay: -0.07042253521126761s;
+}
+.loadingio-spinner-cube-0wguqq8e5ftg {
+  width: 197px;
+  height: 197px;
+  display: inline-block;
+  overflow: hidden;
+  background: transparent;
+}
+.ldio-td6ns31unp {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform: translateZ(0) scale(1);
+  backface-visibility: hidden;
+  transform-origin: 0 0; /* see note above */
+}
+.ldio-td6ns31unp div {
+  box-sizing: content-box;
+}

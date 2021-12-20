@@ -85,7 +85,8 @@ def endgame(request, game_key):
 
     for item in sort_orders[0:4]:
         # print('{}-{}'.format(item[0], item[1]))
-        context["list_top"].append({"name":item[0], "score":item[1]})
+        score = int(item[1])
+        context["list_top"].append({"name":item[0], "score":score})
 
 
 
@@ -122,7 +123,7 @@ def playGame(request, game_key, question_id, uid):
 
     if (request.method == "POST"):
         next_question_id = request.POST.get("next_question_id")
-        # print(next_question_id)
+        print(next_question_id)
         # # next_question_id="2" # get from form
         # gen_question(game_key=game_key, question_id=next_question_id, uid=uid)
         question_id=next_question_id
@@ -134,7 +135,7 @@ def playGame(request, game_key, question_id, uid):
         resp = requests.get(url)
         res=json.loads(resp._content)    
         dict_question=res[list(res.keys())[0]]
-        
+        print(dict_question)
         if (dict_question['end'] == True):
             return redirect(endgame, game_key)
         else:
@@ -170,7 +171,8 @@ def playGame(request, game_key, question_id, uid):
 @permission_classes((AllowAny,))  # here we specify permission by default we set IsAuthenticated
 def submitanswer(request):
     # print('data')
-    data = json.loads(str(request.body, encoding='utf-8'))
+    #data = json.loads(str(request.body, encoding='utf-8'))
+    data = request.data
     print(data)
     # check timeout or not
     # if yes -> set count time
@@ -204,7 +206,7 @@ def submitanswer(request):
     player = db.child("players/{}".format(data['uid'])).update({'sum_score':current_score+new_score})
 
     
-    msg += "  ได้รับ"
+    msg += " ได้รับ "
     msg += str(new_score)
     msg += " คะแนน"
     return Response(msg)

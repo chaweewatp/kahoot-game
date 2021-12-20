@@ -1,22 +1,46 @@
 <!DOCTYPE html>
 {% load static %}
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Error</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js" integrity="sha256-xNzN2a4ltkB44Mc/Jz3pT4iU1cmeR0FkXs4pru/JxaQ=" crossorigin="anonymous"></script>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>End</title>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js"
+      integrity="sha256-xNzN2a4ltkB44Mc/Jz3pT4iU1cmeR0FkXs4pru/JxaQ="
+      crossorigin="anonymous"
+    ></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.slim.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-</head>
-<body>
-    เกมส์จบแล้วจ้าา <br>
-
-    {% for item in list_top%}
-      {{ item.name }} - {{ item.score }} คะแนน<br>
-    {% endfor %}
-</body>
-
-
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+      crossorigin="anonymous"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans&family=Noto+Sans+Thai&family=Cherry+Bomb&family=Roboto&family=Capriola"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="{% static 'css/endgame.css' %}" />
+  </head>
+  <body>
+    <div class="fixed-top">
+      <span>Scoreboard</span>
+    </div>
+    <div class="outer">
+      <div class="title">
+        <p class="title-text">Hub</p>
+        <p class="title-text-under">Quiz!</p>
+      </div>
+      <div class="list">
+        {% for item in list_top%}
+        <div class="player">
+          <span>{{ item.name }}</span>
+          <span>{{ item.score }}</span>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </body>
 </html>

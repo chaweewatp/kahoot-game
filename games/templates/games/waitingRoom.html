@@ -1,33 +1,63 @@
 <!DOCTYPE html>
 {% load static %}
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Title</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js" integrity="sha256-xNzN2a4ltkB44Mc/Jz3pT4iU1cmeR0FkXs4pru/JxaQ=" crossorigin="anonymous"></script>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hub Quiz</title>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js"
+      integrity="sha256-xNzN2a4ltkB44Mc/Jz3pT4iU1cmeR0FkXs4pru/JxaQ="
+      crossorigin="anonymous"
+    ></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.slim.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-</head>
-<body>
-    
-    Welcome to game! <br>
-    {{ gameId }} <br>
-    <form method="POST" id="autoSubmitForm">
-        {% csrf_token %}
-        <input id="game_key"  value="{{ game_key }}" hidden=true>
-    </form>
-
-    please wait until admin start the game <br>
-    list of people are wating: <br>
-    <div id="waitingList">
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+      crossorigin="anonymous"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans&family=Noto+Sans+Thai&family=Cherry+Bomb&family=Roboto&family=Capriola"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="{% static 'css/waitingRoom.css' %}" />
+  </head>
+  <body>
+    <div class="outer" id="waiting">
+      <div class="title">
+        <p class="title-text">You‘re in!</p>
+        <p class="title-text-under">See your nickname on screen</p>
+      </div>
+      <div class="list-border-mobile" id="waitingListMobile"></div>
+      <div class="list-border-desktop" id="waitingListDesktop"></div>
+      <div>
+        <span class="bottom-text">Please wait until admin start the game</span>
+      </div>
     </div>
 
+    <div class="outer" id="ready" hidden>
+      <div class="title">
+        <p class="title-text">Get Ready!</p>
+        <div class="loadingio-spinner-cube-0wguqq8e5ftg">
+          <div class="ldio-td6ns31unp">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+          </div>
+        </div>
+        <p class="title-text-loading">Loading</p>
+      </div>
+    </div>
 
-</body>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.0.1/firebase.js"></script>
-<script src="{%  static 'js/waitingRoom.js' %}"></script>
-
+    <form method="POST" id="autoSubmitForm">
+      {% csrf_token %}
+      <input id="game_key" value="{{ game_key }}" hidden="true" />
+    </form>
+  </body>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.0.1/firebase.js"></script>
+  <script src="{%  static 'js/waitingRoom.js' %}"></script>
 </html>

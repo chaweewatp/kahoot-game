@@ -1,46 +1,130 @@
 <!DOCTYPE html>
 {% load static %}
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Question</title>
-    <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script
+      src="https://code.jquery.com/jquery-3.6.0.js"
+      integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://code.jquery.com/jquery-3.6.0.min.js"
+      integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+      crossorigin="anonymous"
+    ></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-<style>
-    .highlightButton {
-  border-color: blue;
-  color: blue;
-  font-weight: bold;
-}
-</style>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+      crossorigin="anonymous"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans&family=Noto+Sans+Thai&family=Cherry+Bomb&family=Roboto&family=Capriola"
+      rel="stylesheet"
+    />
+    <link href="http://fonts.cdnfonts.com/css/chalkboard-se" rel="stylesheet" />
+    <link rel="stylesheet" href="{% static 'css/playGame.css' %}" />
+  </head>
+  <body>
+    <div id="start-outer" class="outer">
+      <div class="title">
+        <p class="title-text">Question {{question_id}}</p>
+        <div class="spinner-outer">
+          <div id="start" class="demo hidden">
+            <div class="demo__colored-blocks">
+              <div class="demo__colored-blocks-rotater">
+                <div class="demo__colored-block"></div>
+                <div class="demo__colored-block"></div>
+                <div class="demo__colored-block"></div>
+              </div>
+              <div class="demo__colored-blocks-inner"></div>
+              <div class="demo__text">Ready</div>
+            </div>
+            <div class="demo__inner">
+              <svg class="demo__numbers" viewBox="0 0 100 100">
+                <defs>
+                  <path class="demo__num-path-1" d="M40,28 55,22 55,78" />
+                  <path
+                    class="demo__num-join-1-2"
+                    d="M55,78 55,83 a17,17 0 1,0 34,0 a20,10 0 0,0 -20,-10"
+                  />
+                  <path
+                    class="demo__num-path-2"
+                    d="M69,73 l-35,0 l30,-30 a16,16 0 0,0 -22.6,-22.6 l-7,7"
+                  />
+                  <path
+                    class="demo__num-join-2-3"
+                    d="M28,69 Q25,44 34.4,27.4"
+                  />
+                  <path
+                    class="demo__num-path-3"
+                    d="M30,20 60,20 40,50 a18,15 0 1,1 -12,19"
+                  />
+                </defs>
+                <path
+                  class="demo__numbers-path"
+                  d="M-10,20 60,20 40,50 a18,15 0 1,1 -12,19 
+                      Q25,44 34.4,27.4
+                      l7,-7 a16,16 0 0,1 22.6,22.6 l-30,30 l35,0 L69,73 
+                      a20,10 0 0,1 20,10 a17,17 0 0,1 -34,0 L55,83 
+                      l0,-61 L40,28"
+                />
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
-</head>
-<body>
-  <input id="game_key"  value="{{ game_key }}" hidden=true>
-  <input id="question_key"  value="{{ question_key }}" hidden=true>
-  <input id="uid"  value="{{ uid }}" hidden=true>
-  <div id="countdown"></div>
+    <div id="game" class="game-outer" hidden>
+      <div class="game-top">
+        <span>Question {{ question_id }}</span>
+      </div>
+      <div class="game-question">
+        <span>{{ text }}</span>
+      </div>
+      <div class="game-answer">
+        {% for item in answer %}
+        <button type="button" id="choice{{ item.choice }}"name="choice" onclick=submitAnswer("{{ item.choice }}")><span>{{ item.choice }} . {{ item.text }}</span></button>
+        {% endfor %}
+      </div>
+    </div>
 
-  question No. {{ question_id }}<br>
-  คำถาม:<br>
-  {{ text }}<br>
-  {% for item in answer %}
-  <button type="button" id="choice{{ item.choice }}"name="choice" onclick=submitAnswer("{{ item.choice }}")>{{ item.choice }} . {{ item.text }}</button><br>
-  {% endfor %}
-  <form method="POST" id="autoSubmitForm">
-    {% csrf_token %}
-    <input type="number" name="next_question_id" value={{ next_question_id }} hidden=true><br>
-  </form>
-
-  <p id="response_msg"></p>
-  <p id="summary_msg"></p>
+    <div id="result" class="outer" hidden>
+      <div class="title">
+        <p id="result-title" class="title-text"></p>
+      </div>
+      <img id="correct" class="result-icon" src="{% static 'image/correct.png' %}" hidden/>
+      <img id="incorrect" class="result-icon" src="{% static 'image/incorrect.png' %}" hidden/>
+      <p id="score-title" class="score-title" hidden>My score</p>
+      <div class="score-outer">
+        <span id="score-text"></span>
+      </div>
+    </div>
 
 
-</body>
-<script src="https://www.gstatic.com/firebasejs/8.0.1/firebase.js"></script>
-<script src="{%  static 'js/gamePlay.js' %}"></script>
+    <input id="game_key" value="{{ game_key }}" hidden="true" />
+    <input id="question_key" value="{{ question_key }}" hidden="true" />
+    <input id="uid" value="{{ uid }}" hidden="true" />
+    <div id="countdown"></div>
 
+    <form method="POST" id="autoSubmitForm" hidden>
+      {% csrf_token %}
+      <input
+        type="number"
+        name="next_question_id"
+        value="{{next_question_id}}"
+        hidden="true"
+      /><br />
+    </form>
+
+    <p id="response_msg" hidden></p>
+    <p id="summary_msg" hidden></p>
+  </body>
+  <script src="https://www.gstatic.com/firebasejs/8.0.1/firebase.js"></script>
+  <script src="{%  static 'js/gamePlay.js' %}"></script>
 </html>
