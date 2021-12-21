@@ -11,8 +11,8 @@ let timeout = true;
 let response_msg = "";
 let summary_msg = "";
 
-END_POINT_URL = "http://127.0.0.1:8000";
-//END_POINT_URL="https://ihubgamming.herokuapp.com"
+// END_POINT_URL = "http://127.0.0.1:8000";
+END_POINT_URL="https://ihubgamming.herokuapp.com"
 
 let game_key = document.getElementById("game_key").value;
 let question_key = document.getElementById("question_key").value;
