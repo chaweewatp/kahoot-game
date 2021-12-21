@@ -198,7 +198,8 @@ def submitanswer(request):
             countTime=data["countTime"]
             msg += "ถูกต้อง!"
 
-            new_score = 1/math.log10(countTime)*100
+            # new_score = 1/math.log10(countTime)*100
+            new_score =(1000-math.log(countTime/30)*100)/10
     db = firebase.database()
     player = db.child("players/{}/sum_score".format(data['uid'])).get()
     current_score=player.val()
