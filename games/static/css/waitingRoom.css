@@ -40,21 +40,21 @@ body {
 
 .title-text {
   font-family: "Cherry Bomb";
-  font-size: calc(2em + 5vmin);
+  font-size: calc(1em + 8vmin);
   font-weight: 400;
   margin: 0;
 }
 
 .title-text-under {
-  font-family: "Cherry Bomb";
-  font-size: 20px;
+  font-family: "Mali";
+  font-size: calc(0.2em + 5vmin);
   font-weight: 400;
   margin: 0;
 }
 
 .title-text-loading {
-  font-family: "Capriola";
-  font-size: 24px;
+  font-family: "Mali";
+  font-size: calc(0.5em + 5vmin);
   font-weight: 400;
   margin: 0;
 }

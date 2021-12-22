@@ -41,8 +41,8 @@
 }
 
 .title-text-under {
-  font-family: "Capriola";
-  font-size: 48px;
+  font-family: "Mali";
+  font-size: calc(0.5em + 3vmin);
   font-weight: 400;
   margin: 0;
 }
@@ -357,7 +357,7 @@
 }
 
 .game-top > span {
-  font-family: "Chalkboard SE";
+  font-family: "Mali";
   font-size: 40px;
   font-weight: 700;
   line-height: 100px;
@@ -376,7 +376,7 @@
 }
 
 .game-question > span {
-  font-family: "Chalkboard SE";
+  font-family: "Mali";
   font-size: calc(0.4rem + 5vmin);
   font-weight: 700;
 }
@@ -407,7 +407,7 @@
 
 .game-answer > button > span {
   font-size: calc(0.3rem + 5vmin);
-  font-family: "Chalkboard SE";
+  font-family: "Mali";
   font-weight: 700;
   color: white;
 }
