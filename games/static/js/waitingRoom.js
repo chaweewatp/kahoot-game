@@ -2,9 +2,9 @@ jQuery(document).ready(function () {
   getRtdbData();
 });
 
-var data = [];
-var layout;
-var fill = d3.scale.ordinal(d3.schemeCategory20);
+// var data = [];
+// var layout;
+// var fill = d3.scale.ordinal(d3.schemeCategory20);
 
 function getRtdbData() {
   const firebaseConfig = {
@@ -34,6 +34,7 @@ function getRtdbData() {
     .orderByChild("game_key")
     .equalTo(game_key)
     .on("value", async function (snapshot) {
+
       $("#waitingListMobile").empty();
       $("#waitingListDesktop").empty();
       await snapshot.forEach((childSnapshot) => {
@@ -63,7 +64,7 @@ function getRtdbData() {
   var gameStatusRef = firebase.database().ref("games/" + game_key + "/");
   gameStatusRef.on("child_changed", function (snapshot) {
     const changedPost = snapshot.val();
-    // console.log(changedPost)
+    console.log(changedPost)
     if (changedPost == "start") {
       console.log("game is about to start");
       $("#waiting").attr("hidden", true);
@@ -76,24 +77,24 @@ function getRtdbData() {
   });
 }
 
-function draw(words) {
-  d3.select("#demo1")
-    .append("g")
-    .attr(
-      "transform",
-      "translate(" + layout.size()[0] / 2 + "," + layout.size()[1] / 2 + ")"
-    )
-    .selectAll("text")
-    .data(words)
-    .enter()
-    .append("text")
-    .text((d) => d.text)
-    .style("font-size", (d) => d.size + "px")
-    .style("font-family", (d) => d.font)
-    .style("fill", (d, i) => fill(i))
-    .attr("text-anchor", "middle")
-    .attr(
-      "transform",
-      (d) => "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")"
-    );
-}
+// function draw(words) {
+//   d3.select("#demo1")
+//     .append("g")
+//     .attr(
+//       "transform",
+//       "translate(" + layout.size()[0] / 2 + "," + layout.size()[1] / 2 + ")"
+//     )
+//     .selectAll("text")
+//     .data(words)
+//     .enter()
+//     .append("text")
+//     .text((d) => d.text)
+//     .style("font-size", (d) => d.size + "px")
+//     .style("font-family", (d) => d.font)
+//     .style("fill", (d, i) => fill(i))
+//     .attr("text-anchor", "middle")
+//     .attr(
+//       "transform",
+//       (d) => "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")"
+//     );
+// }
