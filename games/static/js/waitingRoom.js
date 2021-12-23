@@ -1,10 +1,7 @@
 jQuery(document).ready(function () {
+  console.log("getRtdbData");
   getRtdbData();
 });
-
-// var data = [];
-// var layout;
-// var fill = d3.scale.ordinal(d3.schemeCategory20);
 
 function getRtdbData() {
   const firebaseConfig = {
@@ -19,22 +16,22 @@ function getRtdbData() {
     appId: "1:516373221314:web:1f5c232abb1488162e905b",
   };
   firebase.initializeApp(firebaseConfig);
-  // console.log("firebase connected");
+  console.log("firebase connected");
   var game_key = document.getElementById("game_key").value;
+  console.log(game_key)
   var playerRef = firebase.database().ref("players/");
 
-  // // retieve all players
-  // playerRef.on('value', function(snapshot){
-  //     var arr = snapshot.val();
-  //     console.log(arr)
-  // })
+  // retieve all players
+  playerRef.on('value', function(snapshot){
+      var arr = snapshot.val();
+      console.log(arr)
+  })
   // console.log(game_key);
   // // retieve players with game id
   playerRef
     .orderByChild("game_key")
     .equalTo(game_key)
     .on("value", async function (snapshot) {
-
       $("#waitingListMobile").empty();
       $("#waitingListDesktop").empty();
       await snapshot.forEach((childSnapshot) => {
@@ -61,9 +58,16 @@ function getRtdbData() {
     });
 
   // var game_key=document.getElementById("game_key").value;
+  // console.log("games/" + game_key + "/status/")
   var gameStatusRef = firebase.database().ref("games/" + game_key + "/");
+
+//   gameStatusRef.on('value', function(snapshot){
+//     var arr = snapshot.val();
+//     console.log(arr)
+// })
   gameStatusRef.on("child_changed", function (snapshot) {
     const changedPost = snapshot.val();
+    console.log('game status:');
     console.log(changedPost)
     if (changedPost == "start") {
       console.log("game is about to start");
